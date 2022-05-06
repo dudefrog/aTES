@@ -1,0 +1,89 @@
+{% extends "base.html" %} {% block content %}
+<div>Welcome, {{request.user}}</div>
+
+<div class="tasks-table">
+  <h3 class="title is-4">Your tasks</h3>
+  {% if not user_tasks %} You're lucky, no tasks are assigned to you {% endif %}
+  <div class="task-list">
+    {% for task in user_tasks %}
+    <div class="card task-item">
+      <div class="task-title">{{task.title}}</div>
+      <form method="POST">
+        {%csrf_token%}
+        <input type="hidden" name="task_id_to_complete" value="{{task.id}}" />
+        <button class="button is-secondary">Complete</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  <div></div>
+</div>
+
+<div class="add-task-block">
+  <h3 class="title is-4">Add new task</h3>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="field">
+      <label class="label">Title</label>
+      <div class="control">
+        <input class="input" type="text" name="title" placeholder="Title" />
+      </div>
+    </div>
+    <button type="submit" class="button is-primary">Add task</button>
+  </form>
+</div>
+
+<div class="tasks-table">
+  <h3 class="title is-4">Sprint board</h3>
+  <div>
+    {% if not tasks %} Sprint board is empty {% endif %}
+    <div class="task-list">
+      {% for task in tasks %}
+      <div class="card task-item">
+        <div class="task-title">
+          <span>{{task.title}}</span>
+          {% if task.is_closed %}
+          <span class="task-status">[CLOSED]</span>
+          {% else %}
+          <span class="task-status">[IN PROGRESS]</span>
+          {% endif %}
+        </div>
+        {% if task.assignee %}
+        <div class="assignee">Assignee: {{task.assignee}}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .add-task-block,
+  .tasks-table {
+    margin: 1.5rem 0;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .task-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .task-item .button {
+    align-self: flex-start;
+  }
+  .task-title {
+    font-weight: bold;
+  }
+  .task-status {
+    color: grey;
+    font-weight: normal;
+  }
+</style>
+{% endblock %}

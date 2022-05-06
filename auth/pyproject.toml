@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "auth-service"
+version = "0.1.0"
+description = "Auth service"
+authors = ["Denis Kirisov"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^4.0.4"
+django-oauth-toolkit = "^2.0.0"
+kafka-python = "^2.0.2"
+
+
+[build-system]
+requires = ["poetry>=1.0.0"]
+build-backend = "poetry.masonry.api"

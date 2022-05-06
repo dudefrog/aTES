@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block content %}
+<div class="wrapper">
+  <div class="has-text-centered">You have to authenticate yourself</div>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="field">
+      <label class="label">Popug identifier</label>
+      <div class="control">
+        <input
+          class="input is-success"
+          type="text"
+          name="username"
+          placeholder="popug"
+        />
+      </div>
+    </div>
+
+    <div class="field has-text-centered">
+      <button type="submit" class="button is-primary">Auth</button>
+    </div>
+
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+</div>
+
+<style>
+  form {
+    width: 20rem;
+    margin: 3rem auto;
+  }
+</style>
+{% endblock %}
