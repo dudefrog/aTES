@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block content %}
+<div class="wrapper">
+  <div class="has-text-centered">
+    <div>Hello, {{request.user}}</div>
+    <div>Go to <a href="/o/applications">My Applications</a></div>
+  </div>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div>Wanna change your ID?</div>
+    <div class="field">
+      <label class="label">New identifier</label>
+      <div class="control">
+        <input
+          class="input is-success"
+          type="text"
+          name="username"
+          placeholder="popug"
+          value="{{request.user.username}}"
+        />
+      </div>
+    </div>
+
+    <div class="field">
+      <button type="submit" class="button">Change</button>
+    </div>
+
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+</div>
+
+<style>
+  form {
+    width: 20rem;
+    margin: 3rem auto;
+  }
+</style>
+{% endblock %}
