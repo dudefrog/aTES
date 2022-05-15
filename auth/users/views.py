@@ -2,10 +2,11 @@ import re
 
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from oauth2_provider.decorators import protected_resource
 
-from auth.async_messaging import UserLoggedIn, UsernameChanged, UserRegistered
+from auth import events
+from auth.events import validate_and_publish
 from users.models import User
 
 PWD = "IM_LAZY_TO_GOOGLE_HOW_TO_REMOVE_PASSWORD_FROM_USER"
@@ -25,11 +26,10 @@ def login_view(request: HttpRequest):
             User.objects.get(username=username)
         except User.DoesNotExist:
             user = User.objects.create_user(username=username, password=PWD)
-            UserRegistered(user).send()
+            validate_and_publish(events.UserCreated_v1, user)
 
         user = authenticate(request, username=username, password=PWD)
         login(request, user)
-        UserLoggedIn(user).send()
 
         if redirect_after_login := request.GET.get("next"):
             return HttpResponseRedirect(redirect_after_login)
@@ -37,8 +37,12 @@ def login_view(request: HttpRequest):
 
 
 def logout_view(request: HttpRequest):
+    redirect_url = request.GET.get("redirectUrl")
     logout(request)
-    return HttpResponseRedirect("/")
+    if redirect_url:
+        return redirect(redirect_url)
+    else:
+        return HttpResponseRedirect("/")
 
 
 def index_view(request: HttpRequest):
@@ -46,11 +50,23 @@ def index_view(request: HttpRequest):
         return HttpResponseRedirect("/login")
 
     if request.method == "POST":
-        new_username = request.POST["username"]
         user = User.objects.get(id=request.user.id)
-        user.username = new_username
-        user.save()
-        UsernameChanged(user).send()
+        new_username = request.POST["username"]
+        if user.username != new_username:
+            user.username = new_username
+            user.save()
+            validate_and_publish(
+                events.UserUpdated_v1,
+                {"public_id": user.public_id, "username": new_username},
+            )
+        new_role = request.POST["role"]
+        if user.role != new_role:
+            user.role = new_role
+            user.save()
+            validate_and_publish(
+                events.UserUpdated_v1,
+                {"public_id": user.public_id, "role": new_role},
+            )
         return HttpResponseRedirect("/")
 
     return render(request, "users/index.html", {})
@@ -62,6 +78,7 @@ def user_info_view(request: HttpRequest):
     return JsonResponse(
         {
             "username": user.username,
-            "user_id": user.id,
+            "public_id": user.public_id,
+            "role": user.role,
         }
     )

@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block content %}
-<div>Welcome, {{request.user}}</div>
+<div>Welcome, <b>{{request.user}}</b> ({{request.user.role}})</div>
 
 <div class="tasks-table">
   <h3 class="title is-4">Your tasks</h3>
@@ -35,6 +35,13 @@
 
 <div class="tasks-table">
   <h3 class="title is-4">Sprint board</h3>
+  {% if request.user.role == "manager" %}
+  <form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="_action" value="shuffle-tasks" />
+    <button type="submit" class="button is-danger mb-3">Shuffle tasks!</button>
+  </form>
+  {% endif %}
   <div>
     {% if not tasks %} Sprint board is empty {% endif %}
     <div class="task-list">

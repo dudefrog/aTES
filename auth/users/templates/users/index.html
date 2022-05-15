@@ -2,6 +2,7 @@
 <div class="wrapper">
   <div class="has-text-centered">
     <div>Hello, {{request.user}}</div>
+    <div>Your role: {{request.user.role}}</div>
     <div>Go to <a href="/o/applications">My Applications</a></div>
   </div>
 
@@ -18,6 +19,23 @@
           placeholder="popug"
           value="{{request.user.username}}"
         />
+      </div>
+    </div>
+
+    <div>Do you want to escalate your popug privileges?</div>
+    <div class="field">
+      <label class="label">New role</label>
+      <div class="control">
+        <select
+          name="role"
+          class="input is-success"
+          id="role"
+          value="{{request.user.role}}"
+        >
+          <option value="user">User</option>
+          <option value="manager">Manager</option>
+          <option value="admin">Admin</option>
+        </select>
       </div>
     </div>
 

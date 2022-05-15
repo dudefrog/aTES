@@ -131,11 +131,13 @@ AUTH_USER_MODEL = "users.User"
 OAUTH_PROVIDER_BASE_URL = "http://localhost:5000"
 BASE_URL = "http://localhost:8050"
 OAUTH_CLIENT_ID = os.getenv(
-    "OAUTH_CLIENT_ID", "m8y3oAR8oIPnZjpWgPWAevvuAu5nwfbcxEsuGjCY"
+    "OAUTH_CLIENT_ID", "NDEWflm8nr7Ws0VaoGDaQbCxCLuuqNnS42VIdsaA"
 )
 OAUTH_CLIENT_SECRET = os.getenv(
     "OAUTH_CLIENT_SECRET",
-    "9iosRB4MxCcDzRqS1y80VXJbSI7HXIYWtClv5OUqXdje5xBJpX2Lwe7xHU86O9OLehpA86ZSazH5ZXLB27ttQU5YyFbuZFLUizReLIaLsh7VIxpOtuMoO0owkIqbjPRr",
+    "ngdwON8ukbNoHkoNXKvU7tpK9f4GyAAeRvly4OsPzxfsR5PVbqfA6AdGpR2ztr15gx5gzOPDEP7MVwKohBhxvUhY7CgJUxE1yPH5cJW2vsOzNsLYfN4jj3ROFBA0qfRt",
 )
 
 KAFKA_SERVERS = ["localhost:9092"]
+
+SESSION_COOKIE_NAME = "popugTaskTrackerSessionID"
