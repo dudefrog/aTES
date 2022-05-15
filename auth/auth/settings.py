@@ -134,3 +134,5 @@ LOGIN_URL = "/login/"
 AUTH_USER_MODEL = "users.User"
 
 KAFKA_SERVERS = ["localhost:9092"]
+
+SESSION_COOKIE_NAME = "popugAuthSessionID"

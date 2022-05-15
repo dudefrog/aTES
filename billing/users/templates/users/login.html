@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block content %}
+<div class="wrapper">
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="button is-primary">Login with Popug Auth 🦜</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+</div>
+
+<style>
+  .wrapper {
+    width: 30rem;
+    margin: 3rem auto;
+    text-align: center;
+  }
+</style>
+
+{% endblock %}

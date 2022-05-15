@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <title>{% block title %}Accounting and Billing{% endblock %}</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="title has-text-centered mt-6">Popug Accounting & Billing 💰</h1>
+
+      {% if request.user.is_authenticated %}
+      <div class="has-text-centered">
+        <button class="button"><a href="/logout">Logout</a></button>
+      </div>
+      {% endif %}
+
+      <div id="content" class="container">{% block content %}{% endblock %}</div>
+    </div>
+  </body>
+  <style>
+    #content {
+      max-width: 40rem;
+    }
+  </style>
+</html>

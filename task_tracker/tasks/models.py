@@ -13,7 +13,7 @@ class Task(models.Model):
     assignee = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, default=None
     )
-    uuid = models.CharField(max_length=128, default=generate_uuid)
+    public_id = models.CharField(max_length=128, default=generate_uuid)
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=128, default="")
     created_at = models.DateTimeField(auto_now_add=True, blank=True)

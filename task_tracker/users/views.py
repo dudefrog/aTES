@@ -1,7 +1,7 @@
 import requests
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template import loader
 
 from task_tracker import settings
@@ -24,7 +24,14 @@ def login_view(request: HttpRequest):
         return HttpResponseRedirect(url)
 
 
-def logout_view(request: HttpRequest):
+def start_logout_view(request: HttpRequest):
+    return redirect(
+        f"{settings.OAUTH_PROVIDER_BASE_URL}/logout"
+        f"?redirectUrl={settings.BASE_URL}/finish-logout"
+    )
+
+
+def finish_logout_view(request: HttpRequest):
     logout(request)
     return HttpResponseRedirect("/login")
 
@@ -45,20 +52,22 @@ def oauth_callback(request: HttpRequest):
     if resp.ok:
         resp_data = resp.json()
         access_token = resp_data["access_token"]
-        refresh_token = resp_data["refresh_token"]
         user_info_resp = requests.get(
-            "http://localhost:5000/user-info",
+            f"{settings.OAUTH_PROVIDER_BASE_URL}/user-info",
             headers={"Authorization": f"Bearer {access_token}"},
         )
         if user_info_resp.ok:
             user_info = user_info_resp.json()
             username = user_info["username"]
+            public_id = user_info["public_id"]
+            role = user_info["role"]
             try:
-                User.objects.get(external_user_id=user_info["user_id"])
+                User.objects.get(public_id=public_id)
             except User.DoesNotExist:
                 User.objects.create_user(
                     username=username,
-                    external_user_id=user_info["user_id"],
+                    public_id=public_id,
+                    role=role,
                     password=PWD,
                 )
             user = authenticate(request, username=username, password=PWD)

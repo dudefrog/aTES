@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+
+  "title": "Tasks.Closed.v1",
+  "description": "json schema for tasks closed event (version 1)",
+
+  "definitions": {
+    "event_data": {
+      "type": "object",
+      "properties": {
+        "public_id": { "type": "string" },
+        "user_public_id": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "required": ["public_id", "user_public_id", "title"]
+    }
+  },
+
+  "type": "object",
+
+  "properties": {
+    "event_id": { "type": "string" },
+    "event_version": { "enum": [1] },
+    "event_name": { "type": "string" },
+    "event_time": { "type": "string" },
+    "producer": { "enum": ["auth", "billing", "task_tracker"] },
+
+    "data": { "$ref": "#/definitions/event_data" }
+  },
+
+  "required": [
+    "event_id",
+    "event_version",
+    "event_name",
+    "event_time",
+    "producer",
+    "data"
+  ]
+}

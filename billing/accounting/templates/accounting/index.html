@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block content %}
+
+<div>
+  <div>Hello, <b>{{request.user.username}}</b> ({{request.user.role}})</div>
+
+  <div>Your balance: <b>{{balance}} $</b></div>
+  <div>
+    <h3 class="title is-3 mt-6">Transactions</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Sum</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in transactions %}
+        <tr>
+          <td>{{item.date}}</td>
+          <td>{{item.sum}} $</td>
+          <td>{{item.comment}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div></div>
+
+    {% endblock %}
+  </div>
+</div>

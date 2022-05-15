@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "ates-lib"
+version = "0.1.0"
+description = "Common functionality for aTES project"
+authors = ["Denis Kirisov"]
+packages = [{ include = "ates", from = "."}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+kafka-python = "^2.0.2"
+jsonschema = "^4.5.1"
+pydantic = "^1.8.2"
+Django = "^4.0.4"
+
+[tool.poetry.scripts]
+make-schema = "ates.make_schema:main"
+
+[tool.poetry.dev-dependencies]
+typer = "^0.4.1"
+[build-system]
+requires = ["poetry>=1.0.0"]
+build-backend = "poetry.masonry.api"
